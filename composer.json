@@ -20,6 +20,9 @@
       "MdDoc\\": "src/"
     }
   },
+  "bin": [
+    "bin/mddoc"
+  ],
   "repositories": {
     "packagist": {
       "type": "composer",

@@ -5,11 +5,10 @@
 ## 使用方式
 ```bash
 # 下载包
-composer require buexplain/mddoc
+composer require buexplain/mddoc "dev-master"
 # 运行测试数据，即可查看效果
-cd ./vendor/buexplain/mddoc
-php ./bin.php mddoc ./test ./test/doc
-cd ./test/doc
+php ./vendor/bin/mddoc mddoc ./vendor/buexplain/mddoc/test ./doc
+cd ./doc
 php -S 127.0.0.1:1991
 ```
 
