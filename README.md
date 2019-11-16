@@ -16,3 +16,6 @@ php -S 127.0.0.1:1991
 ## 注意事项
 1. 不支持自定义模板
 2. 不支持解析公式，[点击查看支持的语法](https://github.com/buexplain/mddoc/blob/master/test/test1_one_2.md)
+
+## License
+[Apache-2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
