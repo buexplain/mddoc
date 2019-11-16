@@ -7,8 +7,8 @@
 # 下载包
 composer require buexplain/mddoc "dev-master"
 # 运行测试数据，即可查看效果
-php ./vendor/bin/mddoc mddoc ./vendor/buexplain/mddoc/test ./doc
-cd ./doc
+mkdir doc && cd ./doc
+./vendor/bin/mddoc.bat mddoc ./vendor/buexplain/mddoc/test ./doc
 php -S 127.0.0.1:1991
 ```
 
