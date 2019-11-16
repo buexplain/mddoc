@@ -35,6 +35,8 @@ class App extends Command
         $html_path = $input->getArgument('html');
         $catalog = $input->getArgument('catalog');
         $builder = new Builder($markdown_path, $html_path, $catalog);
+        $output->writeln('starting');
         $builder->run();
+        $output->writeln('succeed');
     }
 }

@@ -17,5 +17,11 @@ php -S 127.0.0.1:1991
 1. 不支持自定义模板
 2. 不支持解析公式，[点击查看支持的语法](https://github.com/buexplain/mddoc/blob/master/test/test1_one_2.md)
 
+## 开发相关
+```bash
+# 运行测试数据
+php bin/mddoc mddoc ./test ./test/doc
+```
+
 ## License
 [Apache-2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
