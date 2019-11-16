@@ -1,0 +1,172 @@
+/**
+ * 对layui进行全局配置
+ */
+layui.config({
+    base: '/statics/js/'
+}).extend({
+    //全文检索
+    searchMdDoc: 'searchMdDoc'
+});
+
+/**
+ * 侧边栏控制按钮
+ */
+function layui_side_control() {
+    document.querySelector('.layui-side-shade').style.display = 'block';
+    document.querySelector('.layui-side-control').style.display = 'none';
+    document.querySelector('.layui-side').classList.add('show');
+    document.querySelector('.layui-side-shade').classList.add('show');
+}
+
+/**
+ * 侧边栏遮罩
+ */
+function layui_side_shade() {
+    document.querySelector('.layui-side').classList.remove('show');
+    document.querySelector('.layui-side-shade').classList.remove('show');
+    document.querySelector('.layui-side-control').style.display = 'block';
+    setTimeout(function(){
+        document.querySelector('.layui-side-shade').style.display = 'none';
+    }, 500);
+}
+
+/**
+ * 渲染侧边栏
+ */
+function render_catalog_json() {
+    layui.use(['element', 'jquery'], function () {
+        var element = layui.element;
+        var $ = layui.jquery;
+        var loop = function (catalog) {
+            var html = '';
+            for(var i in catalog) {
+                var v = catalog[i];
+                if(v['url'] === '') {
+                    v['url'] = 'javascript:;';
+                }else {
+                    v['url'] = v['url'].substr(0, v['url'].length-2)+'html';
+                    if(v['url'].substr(0,1) !== '/') {
+                        v['url'] = '/'+v['url'];
+                    }
+                }
+                //判断当前url是否选中
+                if(v['url'] === window.location.pathname) {
+                    html += '<li class="layui-nav-item layui-this" id="nav-id-'+v['id']+'">';
+                }else {
+                    html += '<li class="layui-nav-item" id="nav-id-'+v['id']+'">';
+                }
+                html += '<a href="'+v['url']+'">'+v['title']+'</a>';
+                if(v['child'].length > 0) {
+                    html += '<ul class="layui-nav-child">';
+                    html += loop(v['child']);
+                    html += '</ul>';
+                }
+                html += '</li>';
+            }
+            return html;
+        };
+        $.get('/statics/js/catalog.json', function (catalog) {
+            document.getElementById('j-catalog').innerHTML = loop(catalog);
+            //寻找选中节点的父级，将其设置为选中
+            $("#j-catalog").find(".layui-this").parents('li').each(function () {
+                $(this).addClass('layui-nav-itemed');
+            });
+            element.init('nav(lay-filter-catalog)');
+        });
+    });
+}
+
+/**
+ * 渲染返回顶部按钮
+ */
+function returnTop() {
+    layui.use(['jquery'], function () {
+        var $ = layui.jquery;
+        var dom = $(".layui-body").eq(0);
+        var returnTop = $(".return-top").eq(0);
+        returnTop.on('click', function () {
+            dom.animate({
+                scrollTop : 0
+            }, 200);
+        });
+        dom.on('scroll', function(){
+            var stop = dom.scrollTop();
+            if(stop >= 200) {
+                returnTop.show();
+            }else {
+                returnTop.hide();
+            }
+        });
+    });
+}
+
+/**
+ * 选中侧边栏
+ * @param id
+ */
+function target_nav_id(id) {
+    layui.use(['jquery'], function () {
+        var $ = layui.jquery;
+        var target = $("#nav-id-"+id);
+        if(target.length === 0) {
+            return;
+        }
+        target.find('a').each(function () {
+            var href = $(this).attr('href');
+            if(href.indexOf('javascript') === -1) {
+                window.location.href = href;
+            }
+        });
+    });
+}
+
+/**
+ * 搜索
+ */
+function search(keyword, event) {
+    var _search = function (keyword) {
+        layui.use(['layer', 'jquery', 'searchMdDoc'], function () {
+            var $ = layui.jquery;
+            var layer = layui.layer;
+            var searchMdDoc = layui.searchMdDoc;
+            keyword = $.trim(keyword);
+            if(keyword === '') {
+                layer.tips('请输入关键词', '#j-search',{
+                    tips: [2, '#FFB800']
+                });
+                return;
+            }
+            var result = searchMdDoc.get(keyword);
+            if(result.length === 0) {
+                layer.tips('没有找到相关信息', '#j-search',{
+                    tips: [2, '#FFB800']
+                });
+                return;
+            }
+            var html = '<div class="search-result">';
+            for(var i in result) {
+                html += '<a href="javascript:;" onclick="target_nav_id('+result[i]['id']+')">';
+                    html += '<h2>';
+                        html += result[i]['title'];
+                    html += '</h2>';
+                    html += '<p>';
+                    if(result[i]['context'] !== '') {
+                        html += result[i]['context'];
+                    }
+                    html += '</p>';
+                html += '</a>';
+            }
+            html += '</div>';
+            layer.open({
+                type: 1,
+                title:'搜索结果',
+                area: ['60%', '60%'], //宽高
+                content: html
+            });
+        });
+    };
+    var e = event || window.event;
+    if(e && e.keyCode === 13) {
+        _search(keyword);
+    }
+}
