@@ -33,6 +33,11 @@ class Builder
      */
     protected $catalog_file;
     /**
+     * 生成的html文档部署为站点的时候所在的站点目录
+     * @var string
+     */
+    protected $doc_root = '/';
+    /**
      * @var Filesystem
      */
     protected $fileSystem;
@@ -60,7 +65,7 @@ class Builder
      */
     protected $search = [];
 
-    public function __construct($markdown_path, $html_path, $catalog_file)
+    public function __construct($markdown_path, $html_path, $catalog_file, $doc_root='/')
     {
         $this->markdown_path = rtrim($markdown_path, '/');
         $this->html_path = rtrim($html_path, '/');
@@ -73,6 +78,12 @@ class Builder
         }
         if(!is_file($this->catalog_file)) {
             throw new InvalidArgumentException('not found catalog file: '.$this->catalog_file);
+        }
+        $doc_root = trim($doc_root, '/');
+        if($doc_root == '') {
+            $this->doc_root = '/';
+        }else{
+            $this->doc_root = "/{$doc_root}/";
         }
         $this->fileSystem = new Filesystem();
         $this->catalogParser = new CatalogParser();
@@ -118,9 +129,9 @@ class Builder
         $content = preg_replace('/#.*(\n|\r\n)/i', '', $content, 1);
         $html = $this->renderTemplate($this->templateArticle, [
             'catalog_title'=>$this->catalogParser->title,
-            'catalog'=>$this->catalogParser->tree,
             'title'=>$this->catalogParser->title,
             'content'=>str_replace('.md', '.html', $this->articleParser->parse($content)),
+            'doc_root'=>$this->doc_root,
         ]);
         //保存为html
         $savePath = $this->html_path.'/index.html';
@@ -146,7 +157,7 @@ class Builder
                 $this->renderArticle($value['child']);
             }elseif($value['url'] !== '') {
                 //渲染markdown文件
-                $value['url'] = ltrim($value['url'], '/');
+                $value['url'] = ltrim($value['url'], '. /');
                 $file = $this->markdown_path.'/'.$value['url'];
                 if(!file_exists($file)) {
                     throw new ParserException("文件不存在: {$file}");
@@ -164,6 +175,7 @@ class Builder
                     'catalog_title'=>$this->catalogParser->title,
                     'title'=>$value['title'],
                     'content'=>$this->articleParser->parse($content),
+                    'doc_root'=>$this->doc_root,
                 ]);
                 //保存到文件
                 $savePath = $this->html_path.'/'.substr($value['url'], 0, -2).'html';

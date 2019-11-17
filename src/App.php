@@ -20,13 +20,16 @@ class App extends Command
         $this
             // 命令的名称
             ->setName('make')
-            // 运行 "php console_command list" 时的简短描述
+            // 命令描述
             ->setDescription('This command can convert markdown to HTML')
-            // 配置一个参数
+            // markdown文档的地址
             ->addArgument('markdown', InputArgument::REQUIRED, 'path of markdown documents')
+            // html文档的地址
             ->addArgument('html', InputArgument::REQUIRED, 'path of html documents')
-            // 配置一个可选参数
-            ->addArgument('catalog', InputArgument::OPTIONAL, 'catalog file of markdown documents', 'README.md');
+            // markdown文档的章节文件名称
+            ->addArgument('catalog', InputArgument::OPTIONAL, 'catalog file of markdown documents', 'README.md')
+            // 站点根目录
+            ->addArgument('doc-root', InputArgument::OPTIONAL, 'web site path of html documents', '/');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -34,7 +37,8 @@ class App extends Command
         $markdown_path = $input->getArgument('markdown');
         $html_path = $input->getArgument('html');
         $catalog = $input->getArgument('catalog');
-        $builder = new Builder($markdown_path, $html_path, $catalog);
+        $doc_root = $input->getArgument('doc-root');
+        $builder = new Builder($markdown_path, $html_path, $catalog, $doc_root);
         $output->writeln('starting');
         $builder->run();
         $output->writeln('succeed');

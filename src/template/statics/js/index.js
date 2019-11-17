@@ -2,7 +2,7 @@
  * 对layui进行全局配置
  */
 layui.config({
-    base: '/statics/js/'
+    base: doc_root+'statics/js/'
 }).extend({
     //全文检索
     searchMdDoc: 'searchMdDoc'
@@ -45,9 +45,13 @@ function render_catalog_json() {
                     v['url'] = 'javascript:;';
                 }else {
                     v['url'] = v['url'].substr(0, v['url'].length-2)+'html';
-                    if(v['url'].substr(0,1) !== '/') {
-                        v['url'] = '/'+v['url'];
+                    if(v['url'].substr(0,1) === '.') {
+                        v['url'] = v['url'].substr(1);
                     }
+                    if(v['url'].substr(0,1) === '/') {
+                        v['url'] = v['url'].substr(1);
+                    }
+                    v['url'] = doc_root+v['url'];
                 }
                 //判断当前url是否选中
                 if(v['url'] === window.location.pathname) {
@@ -65,7 +69,7 @@ function render_catalog_json() {
             }
             return html;
         };
-        $.get('/statics/js/catalog.json', function (catalog) {
+        $.get(doc_root+'statics/js/catalog.json', function (catalog) {
             document.getElementById('j-catalog').innerHTML = loop(catalog);
             //寻找选中节点的父级，将其设置为选中
             $("#j-catalog").find(".layui-this").parents('li').each(function () {

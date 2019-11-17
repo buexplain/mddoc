@@ -1,19 +1,27 @@
 <!DOCTYPE html>
 <html lang="zh">
+<?php
+/**
+ * @var $title string
+ * @var $doc_root string
+ * @var $catalog_title string
+ * @var $content
+ */
+?>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title><?php echo $title;?></title>
-    <link rel="stylesheet" href="/statics/plugin/layui/css/layui.css">
-    <link rel="stylesheet" href="/statics/css/style.css">
-    <link rel="stylesheet" href="/statics/plugin/github-markdown/github-markdown.css">
-    <link rel="stylesheet" href="/statics/plugin/highlight/github.css">
+    <link rel="stylesheet" href="<?php echo $doc_root;?>statics/plugin/layui/css/layui.css">
+    <link rel="stylesheet" href="<?php echo $doc_root;?>statics/css/style.css">
+    <link rel="stylesheet" href="<?php echo $doc_root;?>statics/plugin/github-markdown/github-markdown.css">
+    <link rel="stylesheet" href="<?php echo $doc_root;?>statics/plugin/highlight/github.css">
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
         <div class="layui-logo">
-            <a href="/index.html"><?php echo $catalog_title;?></a>
+            <a href="<?php echo $doc_root;?>index.html"><?php echo $catalog_title;?></a>
         </div>
         <!--搜索框-->
         <div class="search">
@@ -43,9 +51,13 @@
 </div>
 <!--返回顶部按钮-->
 <li class="layui-icon layui-icon-top return-top"></li>
-<script src="/statics/plugin/layui/layui.js"></script>
-<script src="/statics/plugin/highlight/highlight.min.js"></script>
-<script src="/statics/js/index.js"></script>
+<script>
+    //当前文档部署到具体站点时候的目录
+    var doc_root = '<?php echo $doc_root;?>';
+</script>
+<script src="<?php echo $doc_root;?>statics/plugin/layui/layui.js"></script>
+<script src="<?php echo $doc_root;?>statics/plugin/highlight/highlight.min.js"></script>
+<script src="<?php echo $doc_root;?>statics/js/index.js"></script>
 <script>
 //高亮代码
 hljs.initHighlightingOnLoad();

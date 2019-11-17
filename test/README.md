@@ -11,7 +11,7 @@
 |type |  是  |    string   |    段子类型   |
 
 
-*   [test1一级标题1](test1_one_1.md)
+*   [test1一级标题1](./test1_one_1.md)
 *   [test1一级标题2](test1_one_2.md)
 *   test1一级标题3
     *  [test1二级标题1](test1_two_1.md)
