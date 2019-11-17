@@ -8,7 +8,7 @@ layui.define(['jquery'], function(exports) {
             //检索文档内容
             var index = data.content.indexOf(keyword);
             if(index !== -1) {
-                var start = index - 100;
+                var start = index - 50;
                 var end = keyword.length + 100;
                 if(start<0) {
                     start = 0;

@@ -143,26 +143,27 @@ function search(keyword, event) {
                 });
                 return;
             }
-            var html = '<div class="search-result">';
-            for(var i in result) {
-                html += '<a href="javascript:;" onclick="target_nav_id('+result[i]['id']+')">';
-                    html += '<h2>';
-                        html += result[i]['title'];
-                    html += '</h2>';
-                    html += '<p>';
-                    if(result[i]['context'] !== '') {
-                        html += result[i]['context'];
-                    }
-                    html += '</p>';
-                html += '</a>';
-            }
-            html += '</div>';
+            var id = 'j-search-result-'+(+new Date());
             layer.open({
                 type: 1,
                 title:'搜索结果',
                 area: ['60%', '60%'], //宽高
-                content: html
+                content: '<div class="search-result" id="'+id+'"></div>'
             });
+            var div = document.createElement('div');
+            for(var i in result) {
+                var a = document.createElement('a');
+                a.setAttribute('href', "javascript:;");
+                a.setAttribute('onclick', "target_nav_id("+result[i]['id']+")");
+                var h2 = document.createElement('h2');
+                h2.innerText = result[i]['title'];
+                var pre = document.createElement('pre');
+                pre.innerText = result[i]['context'];
+                a.append(h2);
+                a.append(pre);
+                div.append(a);
+            }
+            document.getElementById(id).append(div);
         });
     };
     var e = event || window.event;

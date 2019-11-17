@@ -17,7 +17,7 @@
         </div>
         <!--搜索框-->
         <div class="search">
-            <input type="text" autocomplete="off" id="j-search" class="layui-input" placeholder="请输入关键词，按enter查询" onkeydown="search(this.value, event)">
+            <input type="text" autocomplete="off" id="j-search" class="layui-input" placeholder="请输入关键词，按enter搜索" onkeydown="search(this.value, event)">
         </div>
     </div>
     <!-- 左侧导航区域 -->
@@ -30,7 +30,7 @@
     <div class="layui-side-shade" onclick="layui_side_shade()"></div>
     <!-- 小屏幕下显示菜单的按钮 -->
     <div class="layui-side-control" onclick="layui_side_control()">
-        <i class="layui-icon layui-icon-right"></i>
+        <i class="layui-icon layui-icon-spread-left"></i>
     </div>
     <!-- 内容主体区域 -->
     <div class="layui-body">

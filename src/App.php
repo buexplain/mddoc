@@ -19,7 +19,7 @@ class App extends Command
     {
         $this
             // 命令的名称
-            ->setName('mddoc')
+            ->setName('make')
             // 运行 "php console_command list" 时的简短描述
             ->setDescription('This command can convert markdown to HTML')
             // 配置一个参数

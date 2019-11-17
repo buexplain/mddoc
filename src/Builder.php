@@ -145,6 +145,7 @@ class Builder
             if(!empty($value['child'])) {
                 $this->renderArticle($value['child']);
             }elseif($value['url'] !== '') {
+                //渲染markdown文件
                 $value['url'] = ltrim($value['url'], '/');
                 $file = $this->markdown_path.'/'.$value['url'];
                 if(!file_exists($file)) {
@@ -156,7 +157,7 @@ class Builder
                 $this->search[] = [
                     'id'=>$value['id'],
                     'title'=>$value['title'],
-                    'content'=>$content,
+                    'content'=>preg_replace('/<[^>]+>/', '', $content),
                 ];
                 //渲染成html
                 $html = $this->renderTemplate($this->templateArticle, [
@@ -168,6 +169,26 @@ class Builder
                 $savePath = $this->html_path.'/'.substr($value['url'], 0, -2).'html';
                 $this->fileSystem->mkdir(dirname($savePath));
                 $this->fileSystem->dumpFile($savePath, $html);
+                //迁移markdown文件中的附件
+                preg_match_all('/!?\[.+?\]\((.+?)(\s+"(.*?)")?\)/', $content, $matches);
+                if(isset($matches[1]) && !empty($matches[1])) {
+                    foreach ($matches[1] as $attach) {
+                        if(strlen($attach) == 0 || $attach[0] == '/') {
+                            continue;
+                        }
+                        $attach = ltrim($attach, '. /');
+                        //以当前markdown文件所在目录为根目录，寻找附件文件地址
+                        $attachFile = dirname($file).'/'.$attach;
+                        if(!file_exists($attachFile)) {
+                            continue;
+                        }
+                        //保存路径，以当前markdown转html后的保存路径为根目录
+                        $attachSavePath = dirname($savePath).'/'.$attach;
+                        //保存文件
+                        $this->fileSystem->mkdir(dirname($attachSavePath));
+                        $this->fileSystem->copy($attachFile, $attachSavePath);
+                    }
+                }
             }else{
                 //存储到全文索引中
                 $this->search[] = [
