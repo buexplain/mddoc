@@ -157,7 +157,7 @@ class Builder
                 $this->search[] = [
                     'id'=>$value['id'],
                     'title'=>$value['title'],
-                    'content'=>preg_replace('/<[^>]+>/', '', $content),
+                    'content'=>$content,
                 ];
                 //渲染成html
                 $html = $this->renderTemplate($this->templateArticle, [
