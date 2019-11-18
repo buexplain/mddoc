@@ -9,6 +9,7 @@
 namespace MdDoc;
 
 use InvalidArgumentException;
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -67,15 +68,15 @@ class Builder
 
     public function __construct($markdown_path, $html_path, $catalog_file, $doc_root='/')
     {
-        $this->markdown_path = rtrim($markdown_path, '/');
-        $this->html_path = rtrim($html_path, '/');
+        if(!is_dir($markdown_path)) {
+            throw new InvalidArgumentException('not found markdown path: '.$markdown_path);
+        }
+        if(!is_dir($html_path)) {
+            throw new InvalidArgumentException('not found html path: '.$html_path);
+        }
+        $this->markdown_path = rtrim(str_replace('\\', '/', realpath($markdown_path)), '/');
+        $this->html_path = rtrim(str_replace('\\', '/', realpath($html_path)), '/');
         $this->catalog_file = $this->markdown_path.'/'.$catalog_file;
-        if(!is_dir($this->markdown_path)) {
-            throw new InvalidArgumentException('not found markdown path: '.$this->markdown_path);
-        }
-        if(!is_dir($this->html_path)) {
-            throw new InvalidArgumentException('not found html path: '.$this->html_path);
-        }
         if(!is_file($this->catalog_file)) {
             throw new InvalidArgumentException('not found catalog file: '.$this->catalog_file);
         }
@@ -158,49 +159,64 @@ class Builder
             }elseif($value['url'] !== '') {
                 //渲染markdown文件
                 $value['url'] = ltrim($value['url'], '. /');
-                $file = $this->markdown_path.'/'.$value['url'];
-                if(!file_exists($file)) {
-                    throw new ParserException("文件不存在: {$file}");
+                $markdownFile = $this->markdown_path.'/'.$value['url'];
+                $htmlSavePath = $this->html_path.'/'.substr($value['url'], 0, -2).'html';
+                if(!file_exists($markdownFile)) {
+                    throw new ParserException("not found file: {$markdownFile}");
                 }
                 //读取markdown内容
-                $content = file_get_contents($file);
+                $markdownContent = file_get_contents($markdownFile);
                 //存储到全文索引中
                 $this->search[] = [
                     'id'=>$value['id'],
                     'title'=>$value['title'],
-                    'content'=>$content,
+                    'content'=>$markdownContent,
                 ];
-                //渲染成html
-                $html = $this->renderTemplate($this->templateArticle, [
-                    'catalog_title'=>$this->catalogParser->title,
-                    'title'=>$value['title'],
-                    'content'=>$this->articleParser->parse($content),
-                    'doc_root'=>$this->doc_root,
-                ]);
-                //保存到文件
-                $savePath = $this->html_path.'/'.substr($value['url'], 0, -2).'html';
-                $this->fileSystem->mkdir(dirname($savePath));
-                $this->fileSystem->dumpFile($savePath, $html);
-                //迁移markdown文件中的附件
-                preg_match_all('/!?\[.+?\]\((.+?)(\s+"(.*?)")?\)/', $content, $matches);
+                //迁移markdown文件中的附件，以及支持markdown中嵌入$this->markdown_path目录下的其它markdown文件
+                preg_match_all('/!?\[.+?\]\((.+?)(\s+"(.*?)")?\)/', $markdownContent, $matches);
                 if(isset($matches[1]) && !empty($matches[1])) {
-                    foreach ($matches[1] as $attach) {
+                    foreach ($matches[1] as $key=>$attach) {
                         if(strlen($attach) == 0 || $attach[0] == '/') {
                             continue;
                         }
-                        $attach = ltrim($attach, '. /');
+                        $cleanAttach = substr($attach,0,2) == './' ? substr($attach, 2) : $attach;
                         //以当前markdown文件所在目录为根目录，寻找附件文件地址
-                        $attachFile = dirname($file).'/'.$attach;
+                        $attachFile = realpath(dirname($markdownFile).'/'.$cleanAttach);
                         if(!file_exists($attachFile)) {
                             continue;
                         }
+                        //判断当前文件是否为markdown文件，如果是，则转成转换后的html文件地址
+                        if (strtolower(pathinfo($attach, PATHINFO_EXTENSION)) === 'md') {
+                            //构造成html地址
+                            $attachFile = substr($this->doc_root.ltrim(str_replace('\\','/', substr($attachFile, strlen($this->markdown_path))), '/'), 0, -2).'html';
+                            //替换markdown中的地址
+                            if(isset($matches[0][$key])) {
+                                $search = $matches[0][$key];
+                                $replace = str_replace($attach, $attachFile, $matches[0][$key]);
+                            }else{
+                                $search = $attach;
+                                $replace = $attachFile;
+                            }
+                            $markdownContent = str_replace($search, $replace, $markdownContent);
+                            //跳过，不做拷贝
+                            continue;
+                        }
                         //保存路径，以当前markdown转html后的保存路径为根目录
-                        $attachSavePath = dirname($savePath).'/'.$attach;
+                        $attachSavePath = dirname($htmlSavePath).'/'.$cleanAttach;
                         //保存文件
                         $this->fileSystem->mkdir(dirname($attachSavePath));
                         $this->fileSystem->copy($attachFile, $attachSavePath);
                     }
                 }
+                //渲染成html
+                $html = $this->renderTemplate($this->templateArticle, [
+                    'catalog_title'=>$this->catalogParser->title,
+                    'title'=>$value['title'],
+                    'content'=>$this->articleParser->parse($markdownContent),
+                    'doc_root'=>$this->doc_root,
+                ]);
+                $this->fileSystem->mkdir(dirname($htmlSavePath));
+                $this->fileSystem->dumpFile($htmlSavePath, $html);
             }else{
                 //存储到全文索引中
                 $this->search[] = [

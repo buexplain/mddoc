@@ -1,5 +1,12 @@
 # test1一级标题1
 
+[测试嵌入兄弟级markdown文件](./test1_one_2.md "./test1_one_2.md")
+
+[测试嵌入兄弟级markdown文件](test1_one_2.md "test1_one_2.md")
+
+[测试嵌入其它目录markdown文件](test2/one_1.md "test2/one_1.md")
+
+[测试嵌入其它目录markdown文件](./test2/one_1.md "./test2/one_1.md")
 
 **请求URL：** 
 - ` https://api.xxx.top/getJoke `
@@ -69,21 +76,6 @@ __halt_compiler () ; datahere
 datahere
 datahere */
 datahere
-```
-
-```javascript
-var s = "JavaScript syntax highlighting";
-alert(s);
-```
-
-```python
-s = "Python syntax highlighting"
-print s
-```
-
-```
-No language indicated, so no syntax highlighting.
-But let's throw in a <b>tag</b>.
 ```
 
 **返回示例**
