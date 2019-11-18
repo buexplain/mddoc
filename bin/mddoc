@@ -7,19 +7,21 @@
  * Time: 15:29
  */
 
-use Symfony\Component\Console\Application;
-use MdDoc\App;
-
 $composerAutoload = [
     __DIR__ . '/../vendor/autoload.php', // 开发加载
-    __DIR__ . '/../../../autoload.php',  // composer安装后加载
+    __DIR__ . '/../autoload.php', // linux下composer安装后加载
+    __DIR__ . '/../../../autoload.php', // windows下composer安装后加载
 ];
+
 foreach ($composerAutoload as $autoload) {
     if (file_exists($autoload)) {
         require($autoload);
         break;
     }
 }
+
+use Symfony\Component\Console\Application;
+use MdDoc\App;
 
 try{
     $application = new Application();
