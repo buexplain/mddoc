@@ -65,7 +65,7 @@ function render_catalog_json() {
                     } else {
                         html += '<dd class="" id="nav-id-' + v['id'] + '">';
                     }
-                    html += '<a href="' + v['url'] + '">' + v['title'] + '</a>';
+                    html += '<a href="'+v['url']+'">'+v['title']+'</a>';
                     if (v['child'].length > 0) {
                         html += '<dl class="layui-nav-child">';
                         html += _loop(v['child']);
@@ -98,13 +98,20 @@ function render_catalog_json() {
             document.getElementById('j-catalog').innerHTML = loop(catalog);
             //寻找选中节点的父级，将其设置为选中
             var target = $("#j-catalog").find(".layui-this");
-            target.parents('dd').each(function () {
-                $(this).addClass('layui-nav-itemed');
-            });
-            target.parents('li').each(function () {
-                $(this).addClass('layui-nav-itemed');
-            });
+            if(target.length > 0) {
+                target.parents('dd').each(function () {
+                    $(this).addClass('layui-nav-itemed');
+                });
+                target.parents('li').each(function () {
+                    $(this).addClass('layui-nav-itemed');
+                });
+            }
+            //绘制菜单栏
             element.init('nav', 'lay-filter-catalog');
+            //滚动到对应的菜单栏
+            if(target.length > 0) {
+                target[0].scrollIntoView && target[0].scrollIntoView();
+            }
         });
     });
 }

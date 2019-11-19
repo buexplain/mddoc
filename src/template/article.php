@@ -21,7 +21,7 @@
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
         <div class="layui-logo">
-            <a href="<?php echo $doc_root;?>index.html"><?php echo $catalog_title;?></a>
+            <a href="<?php echo $doc_root;?>index.html" title="首页"><?php echo $catalog_title;?></a>
         </div>
         <!--搜索框-->
         <div class="search">

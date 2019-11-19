@@ -2,7 +2,7 @@
  * pc版本左侧导航栏拓宽
  */
 @media screen and  (min-width: 750px) {
-    .layui-layout-admin .layui-logo, .layui-layout-admin .layui-side, .layui-layout-admin .layui-nav-tree{
+    .layui-layout-admin .layui-side, .layui-layout-admin .layui-nav-tree{
         width: 280px;
     }
     .layui-layout-admin .layui-side-scroll {
@@ -12,7 +12,8 @@
         left: 300px;
     }
     .layui-layout-admin .layui-logo {
-        left: 20px;
+        width: 265px;
+        left: 15px;
         text-align: left;
         overflow: hidden;
     }
@@ -40,8 +41,6 @@
     background: rgb(46, 49, 57);
     border: none;
     color: #fff;
-}
-.layui-layout-admin .layui-logo {
 }
 .layui-layout-admin .layui-logo a {
     font-size: 22px;
