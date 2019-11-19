@@ -39,20 +39,45 @@ function render_catalog_json() {
         var $ = layui.jquery;
         var loop = function (catalog) {
             var html = '';
+            var cleanUrl = function (url) {
+                if(url === '') {
+                    url = 'javascript:;';
+                }else {
+                    url = url.substr(0, url.length-2)+'html';
+                    if(url.substr(0,1) === '.') {
+                        url = url.substr(1);
+                    }
+                    if(url.substr(0,1) === '/') {
+                        url = url.substr(1);
+                    }
+                    url = doc_root+url;
+                }
+                return url;
+            };
+            var _loop = function (catalog) {
+                var html = '';
+                for(var i in catalog) {
+                    var v = catalog[i];
+                    v['url'] = cleanUrl(v['url']);
+                    //判断当前url是否选中
+                    if (v['url'] === window.location.pathname) {
+                        html += '<dd class="layui-this" id="nav-id-' + v['id'] + '">';
+                    } else {
+                        html += '<dd class="" id="nav-id-' + v['id'] + '">';
+                    }
+                    html += '<a href="' + v['url'] + '">' + v['title'] + '</a>';
+                    if (v['child'].length > 0) {
+                        html += '<dl class="layui-nav-child">';
+                        html += _loop(v['child']);
+                        html += '</dl>';
+                    }
+                    html += '</dd>';
+                }
+                return html;
+            };
             for(var i in catalog) {
                 var v = catalog[i];
-                if(v['url'] === '') {
-                    v['url'] = 'javascript:;';
-                }else {
-                    v['url'] = v['url'].substr(0, v['url'].length-2)+'html';
-                    if(v['url'].substr(0,1) === '.') {
-                        v['url'] = v['url'].substr(1);
-                    }
-                    if(v['url'].substr(0,1) === '/') {
-                        v['url'] = v['url'].substr(1);
-                    }
-                    v['url'] = doc_root+v['url'];
-                }
+                v['url'] = cleanUrl(v['url']);
                 //判断当前url是否选中
                 if(v['url'] === window.location.pathname) {
                     html += '<li class="layui-nav-item layui-this" id="nav-id-'+v['id']+'">';
@@ -61,9 +86,9 @@ function render_catalog_json() {
                 }
                 html += '<a href="'+v['url']+'">'+v['title']+'</a>';
                 if(v['child'].length > 0) {
-                    html += '<ul class="layui-nav-child">';
-                    html += loop(v['child']);
-                    html += '</ul>';
+                    html += '<dl class="layui-nav-child">';
+                    html += _loop(v['child']);
+                    html += '</dl>';
                 }
                 html += '</li>';
             }
@@ -72,10 +97,14 @@ function render_catalog_json() {
         $.get(doc_root+'statics/js/catalog.json', function (catalog) {
             document.getElementById('j-catalog').innerHTML = loop(catalog);
             //寻找选中节点的父级，将其设置为选中
-            $("#j-catalog").find(".layui-this").parents('li').each(function () {
+            var target = $("#j-catalog").find(".layui-this");
+            target.parents('dd').each(function () {
                 $(this).addClass('layui-nav-itemed');
             });
-            element.init('nav(lay-filter-catalog)');
+            target.parents('li').each(function () {
+                $(this).addClass('layui-nav-itemed');
+            });
+            element.init('nav', 'lay-filter-catalog');
         });
     });
 }
