@@ -22,12 +22,6 @@ class CatalogParser extends Parser
     public $title;
 
     /**
-     * 介绍
-     * @var
-     */
-    public $introduction;
-
-    /**
      * 章节数据
      * @var array
      */
@@ -62,18 +56,6 @@ class CatalogParser extends Parser
             $this->levelTwoTitleBlock = true;
         }
         return parent::renderHeadline($block);
-    }
-
-    /**
-     * 解析段落
-     */
-    protected function renderParagraph($block)
-    {
-        if (count($this->tree) == 0) {
-            //解析介绍内容
-            $this->introduction .= $this->renderAbsy($block['content']);
-        }
-        return parent::renderParagraph($block);
     }
 
     /**

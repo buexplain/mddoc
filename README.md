@@ -20,6 +20,8 @@ php -S 127.0.0.1:1991 -t ./doc
 ## 注意事项
 1. 不支持自定义模板
 2. 不支持解析公式，[点击查看支持的语法](https://github.com/buexplain/mddoc/blob/master/test/test1_one_2.md)
+3. 目录列表的每一项目之间不能有空行。[点击查看测试范例](https://github.com/buexplain/mddoc/blob/master/test/README.md)
+4. 如果需要将目录列表划分成多块，必须使用二级标题进行划分。[点击查看测试范例](https://github.com/buexplain/mddoc/blob/master/test/README.md)
 
 ## 二次开发相关
 ```bash
