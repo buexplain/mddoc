@@ -70,6 +70,8 @@ layui.use(['jquery'], function () {
        returnTop();
    });
 });
+//(●ˇ∀ˇ●)
+console.log('[本文档由mddoc生成](https://github.com/buexplain/mddoc)');
 </script>
 </body>
 </html>

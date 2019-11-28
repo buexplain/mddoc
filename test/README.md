@@ -1,15 +1,16 @@
 # mddoc测试
 
-这里是简介
+这里是简介，[本文档由mddoc生成](https://github.com/buexplain/mddoc "本文档由mddoc生成")。
 
-**参数：** 
+**环境说明：** 
 
-|参数名|必选|类型|说明|
-|:----    |:---|:----- |-----   |
-|page |  是  |    int   |    分页   |
-|count |  是  |    int   |    总页数   |
-|type |  是  |    string   |    段子类型   |
+|环境|地址|说明|
+|:----|:---|-----|
+|测试 | `http://test.xx.com` | 测试环境 |
+|预发布 | `http://pre.xx.com` | 预发布环境 |
+|生产| `http://www.xx.com` |  生产环境 |
 
+![[测试本地图片插入]](test-readme-insert.png "测试本地图片插入")
 
 *   [test1一级标题1](./test1_one_1.md)
 *   [test1一级标题2](test1_one_2.md)
@@ -30,7 +31,7 @@
     *  [test3二级标题1](test3/two_1.md)
     *  test3二级标题2
         *  test3三级标题1
-            *  [test3四级标题1](test3/four_1.md)
+            *  [test3四级标题1](./test3/four_1.md)
         *  test3三级标题2
             *  [test3四级标题2](test3/four_2.md)
 *   [test3一级标题4](test3/one_4.md)

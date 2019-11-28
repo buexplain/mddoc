@@ -46,16 +46,7 @@ class CatalogParser extends Parser
     protected $id = 0;
 
     /**
-     * 分析文本并返回从中获取的章节列表
-     * @param string $text
-     */
-    public function analyze($text)
-    {
-        $this->parse($text);
-    }
-
-    /**
-     * 解析标题
+     * 解析一级标题
      */
     protected function renderHeadline($block)
     {

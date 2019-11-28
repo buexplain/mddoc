@@ -24,7 +24,7 @@ php -S 127.0.0.1:1991 -t ./doc
 ## 二次开发相关
 ```bash
 # 运行测试数据
-cd ./test && mkdir doc & cd ../ && php bin/mddoc make ./test ./test/doc && php -S 127.0.0.1:1991 -t ./test/doc 
+cd ./test && mkdir doc & cd ../ && php bin/mddoc make ./test ./test/doc README.md ./test/doc & echo http://127.0.0.1:1991/test/doc/index.html && php -S 127.0.0.1:1991 
 ```
 
 ## License

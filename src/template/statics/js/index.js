@@ -153,7 +153,7 @@ function target_nav_id(id) {
         }
         target.find('a').each(function () {
             var href = $(this).attr('href');
-            if(href.indexOf('javascript') === -1) {
+            if(href.toLowerCase().indexOf('javascript') === -1) {
                 window.location.href = href;
             }
         });
