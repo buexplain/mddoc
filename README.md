@@ -22,6 +22,10 @@ php -S 127.0.0.1:1991 -t ./doc
 2. 不支持解析公式，[点击查看支持的语法](https://github.com/buexplain/mddoc/blob/master/test/test1_one_2.md)
 3. 目录列表的每一项目之间不能有空行。[点击查看测试范例](https://github.com/buexplain/mddoc/blob/master/test/README.md)
 4. 如果需要将目录列表划分成多块，必须使用二级标题进行划分。[点击查看测试范例](https://github.com/buexplain/mddoc/blob/master/test/README.md)
+5. 如果在Linux服务器上运行`./vendor/buexplain/mddoc/bin/mddoc`报错误`没有那个文件或目录`，则是因为该文件的编码格式错误
+   `vim ./vendor/buexplain/mddoc/bin/mddoc`然后用命令`set ff`可以查看到文件编码是`fileformat=dos`，我们可以用命令`set ff=unix`，
+   然后`wq!`改变文件编码。
+6. 如果在Linux服务器上运行`./vendor/buexplain/mddoc/bin/mddoc`报错误`/usr/bin/env: php: 没有那个文件或目录`，则是因为当前服务器的环境变量里面没有php命令导致的，配置php环境变量的方式，请自行使用搜索引擎获取答案。   
 
 ## 二次开发相关
 ```bash

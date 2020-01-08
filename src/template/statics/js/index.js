@@ -95,6 +95,9 @@ function render_catalog_json() {
             return html;
         };
         $.get(doc_root+'statics/js/catalog.json', function (catalog) {
+            if(typeof catalog === 'string') {
+                catalog = JSON.parse(catalog);
+            }
             document.getElementById('j-catalog').innerHTML = loop(catalog);
             //寻找选中节点的父级，将其设置为选中
             var target = $("#j-catalog").find(".layui-this");

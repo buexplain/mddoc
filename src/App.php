@@ -29,7 +29,7 @@ class App extends Command
             // markdown文档的章节文件名称
             ->addArgument('catalog', InputArgument::OPTIONAL, 'catalog file of markdown documents', 'README.md')
             // 站点根目录
-            ->addArgument('doc-root', InputArgument::OPTIONAL, 'web site path of html documents', '/');
+            ->addArgument('doc-root', InputArgument::OPTIONAL, 'web site path of html documents', './');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
