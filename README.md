@@ -34,8 +34,7 @@ E:.
 其中`make.sh`的内容是：
 ```bash
 #!/bin/bash
-rm -rf public
-mkdir public
+rm -rf public/*
 chmod u+x ./vendor/bin/mddoc
 chmod u+x ./vendor/buexplain/mddoc/bin/mddoc
 ./vendor/bin/mddoc make ./doc/ ./public README.md ./
