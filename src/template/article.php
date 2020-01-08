@@ -43,7 +43,7 @@
     <!-- 内容主体区域 -->
     <div class="layui-body">
         <div style="padding: 15px;">
-            <article class="markdown-body">
+            <article class="markdown-body" id="j-markdown-body">
                 <?php echo $content;?>
             </article>
         </div>
@@ -68,6 +68,8 @@ layui.use(['jquery'], function () {
        render_catalog_json();
        //渲染返回顶部的按钮
        returnTop();
+       //优化嵌入的markdown文件的显示
+       viewEmbeddedMarkdown();
    });
 });
 //(●ˇ∀ˇ●)

@@ -21,6 +21,9 @@
 |page |  是  |    int   |    分页   |
 |count |  是  |    int   |    总页数   |
 |type |  是  |    string   |    段子类型   |
+|data |  是  |    array   |    详细数据   |
+|data.name |  是  |   string   |    名称  |
+|data.password |  是  |   string   |   密码  |
 
 **示例代码**
 ```php

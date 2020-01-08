@@ -214,3 +214,71 @@ function search(keyword, event) {
         _search(keyword);
     }
 }
+
+/**
+ * 优化嵌入的markdown文件的显示
+ */
+function viewEmbeddedMarkdown() {
+    layui.use(['jquery', 'layer'], function () {
+        var $ = layui.jquery;
+        var document_w = parseInt($(document).width());
+        var document_h = parseInt($(document).height());
+        $("#j-markdown-body").find("a[href]").each(function (index) {
+            var o = $(this);
+            var href = o.attr('href');
+            //非html文件，非本地文件，则跳过不做处理
+            if(href.length < '/.html'.length || href.substr(0, 1) !== '/' || href.substr(href.length-'.html'.length, '.html'.length) !== '.html') {
+                return '';
+            }
+            if(document_w < 750) {
+                //如果是手机屏幕，则不做点击弹窗，而是直接设置为新开窗口
+                if(o.attr('target') === undefined) {
+                    o.attr('target', '_blank');
+                }
+                return;
+            }
+            //当前为pc屏幕
+            //改href属性为不可跳转
+            o.attr('href', 'javascript:;');
+            //将当前url保存到data-href属性
+            o.attr('data-href', href);
+            o.attr('data-id', 'j-viewEmbeddedMarkdown'+index);
+            //改为点击后弹出窗口
+            o.on('click', function () {
+                var o = $(this);
+                var href = o.attr('data-href');
+                var id = o.attr('data-id');
+                //如果存在，则直接打开
+                var has = $("#"+id);
+                if(has.length > 0) {
+                    layer.restore(has.parent().attr('times'));
+                    return;
+                }
+                layer.open({
+                    type: 2,
+                    id:id,
+                    title: o.text(),
+                    area: [(document_w > 749 ? 749 : document_w)+'px', (document_h-180)+'px'],
+                    fixed: true, //不固定
+                    maxmin: true,
+                    shade:0,
+                    shadeClose: true,
+                    content: href,
+                    min: function (obj) {
+                        //弹出窗口缩小的时候，将其移动到右侧顶部
+                        setTimeout(function () {
+                            var target_w = 340;
+                            var w = parseInt(obj.css('width'));
+                            var h = parseInt(obj.css('height'));
+                            var l = parseInt(obj.css('left'));
+                            var multiple = l%w;
+                            var curr_top = 75+multiple*h+l-w*multiple;
+                            var curr_left = document_w - target_w-15;
+                            obj.css({"width":target_w+'px', 'left':curr_left+'px', 'top':+curr_top+'px'});
+                        }, 80);
+                    }
+                });
+            });
+        });
+    });
+}
