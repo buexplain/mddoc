@@ -2,7 +2,7 @@
 这个是一个可以将markdown转换成html的包。
 创建它的最初目的是用于管理接口文档，当然您也可以用于编写静态博客或其它场景。
 
-## 使用方式
+## 快速体验
 
 ```bash
 # 下载包
@@ -16,6 +16,33 @@ php -S 127.0.0.1:1991 -t ./doc
 # 浏览器打开 http://127.0.0.1:1991/index.html 查看效果
 ```
 如果生成的html需要部署到站点的次级目录，则需要指定次级目录，请用 `./vendor/bin/mddoc.bat make -h` 查看使用说明。
+
+## 一个小案例
+假设我们需要做一个文档管理，目录与文件结构如下：
+```text
+E:.
+│  composer.json
+│  composer.lock
+│  make.sh
+│
+├─doc
+│      README.md
+│      
+└─public
+```
+`composer require buexplain/mddoc "dev-master"`初始化项目，然后新建相关文件。
+其中`make.sh`的内容是：
+```bash
+#!/bin/bash
+rm -rf public
+mkdir public
+chmod u+x ./vendor/bin/mddoc
+chmod u+x ./vendor/buexplain/mddoc/bin/mddoc
+./vendor/bin/mddoc make ./doc/ ./public README.md ./
+```
+`README.md`的内容请参考[README.md编写范例](https://github.com/buexplain/mddoc/blob/master/test/README.md)
+然后运行 `./make.sh`，到这里，doc目录下的markdown文件就都转换成public目录里面的html文件了。然后搭建一个web服务器，将其根目录指向public目录即可。
+
 
 ## 注意事项
 1. 不支持自定义模板
