@@ -42,5 +42,6 @@ class App extends Command
         $output->writeln('starting');
         $builder->run();
         $output->writeln('succeed');
+        return 0;
     }
 }

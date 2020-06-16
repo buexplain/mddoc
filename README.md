@@ -10,7 +10,7 @@ composer require buexplain/mddoc
 # 创建存储html的文件夹
 mkdir doc
 # 根据markdown文档生成html文件，linux下将 mddoc.bat 替换为 mddoc 
-./vendor/bin/mddoc.bat make ./vendor/buexplain/mddoc/test ./doc
+./vendor/bin/mddoc.bat make ./vendor/buexplain/mddoc/tests ./doc
 # 启动web服务器
 php -S 127.0.0.1:1991 -t ./doc
 # 浏览器打开 http://127.0.0.1:1991/index.html 查看效果
@@ -39,15 +39,15 @@ chmod u+x ./vendor/bin/mddoc
 chmod u+x ./vendor/buexplain/mddoc/bin/mddoc
 ./vendor/bin/mddoc make ./doc/ ./public README.md ./
 ```
-`README.md`的内容请参考[README.md编写范例](https://github.com/buexplain/mddoc/blob/master/test/README.md)
+`README.md`的内容请参考[README.md编写范例](https://github.com/buexplain/mddoc/blob/master/tests/README.md)
 然后运行 `./make.sh`，到这里，doc目录下的markdown文件就都转换成public目录里面的html文件了。然后搭建一个web服务器，将其根目录指向public目录即可。
 
 
 ## 注意事项
 1. 不支持自定义模板
-2. 不支持解析公式，[点击查看支持的语法](https://github.com/buexplain/mddoc/blob/master/test/test1_one_2.md)
-3. 目录列表的每一项目之间不能有空行。[点击查看测试范例](https://github.com/buexplain/mddoc/blob/master/test/README.md)
-4. 如果需要将目录列表划分成多块，必须使用二级标题进行划分。[点击查看测试范例](https://github.com/buexplain/mddoc/blob/master/test/README.md)
+2. 不支持解析公式，[点击查看支持的语法](https://github.com/buexplain/mddoc/blob/master/tests/test1_one_2.md)
+3. 目录列表的每一项目之间不能有空行。[点击查看测试范例](https://github.com/buexplain/mddoc/blob/master/tests/README.md)
+4. 如果需要将目录列表划分成多块，必须使用二级标题进行划分。[点击查看测试范例](https://github.com/buexplain/mddoc/blob/master/tests/README.md)
 5. 如果在Linux服务器上运行`./vendor/buexplain/mddoc/bin/mddoc`报错误`没有那个文件或目录`，则是因为该文件的编码格式错误
    `vim ./vendor/buexplain/mddoc/bin/mddoc`然后用命令`set ff`可以查看到文件编码是`fileformat=dos`，我们可以用命令`set ff=unix`，
    然后`wq!`改变文件编码。
@@ -56,7 +56,7 @@ chmod u+x ./vendor/buexplain/mddoc/bin/mddoc
 ## 二次开发相关
 ```bash
 # 运行测试数据
-cd ./test && mkdir doc & cd ../ && php bin/mddoc make ./test ./test/doc README.md ./test/doc & echo http://127.0.0.1:1991/test/doc/index.html && php -S 127.0.0.1:1991 
+cd ./tests && mkdir doc & cd ../ && php bin/mddoc make ./tests ./tests/doc README.md ./tests/doc & echo http://127.0.0.1:1991/tests/doc/index.html && php -S 127.0.0.1:1991 
 ```
 
 ## License
