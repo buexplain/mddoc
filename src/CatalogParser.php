@@ -44,9 +44,9 @@ class CatalogParser extends Parser
      */
     protected function renderHeadline($block)
     {
-        if($block['level'] === 1) {
+        if ($block['level'] === 1) {
             $this->title = $this->renderAbsy($block['content']);
-        }elseif($block['level'] === 2) {
+        } elseif ($block['level'] === 2) {
             $this->tree[] = [
                 'id'=>++$this->id,
                 'title'=>$this->renderAbsy($block['content']),
@@ -63,12 +63,12 @@ class CatalogParser extends Parser
      */
     protected function renderList($block)
     {
-        if($block[0] === 'list' && $this->levelTwoTitleBlock) {
+        if ($block[0] === 'list' && $this->levelTwoTitleBlock) {
             $counter = count($this->tree);
-            if($counter == 0) {
+            if ($counter == 0) {
                 //没有二级标题，直接全是list的情况
                 $this->tree = $this->parseTree($block['items']);
-            }else{
+            } else {
                 //有二级标题，将二级标题下面的list解析成一棵树
                 $this->tree[$counter-1]['child'] = $this->parseTree($block['items']);
             }
@@ -87,21 +87,21 @@ class CatalogParser extends Parser
     {
         $tree = [];
         foreach ($blockItems as $item) {
-            if($item[0][0] === 'link') {
+            if ($item[0][0] === 'link') {
                 $tree[] = [
                     'id'=>++$this->id,
                     'title'=>$item[0]['text'][0][1],
                     'url'=>$item[0]['url'],
                     'child'=>[],
                 ];
-            }elseif($item[0][0] === 'text') {
+            } elseif ($item[0][0] === 'text') {
                 $tmp = [
                     'id'=>++$this->id,
                     'title'=>$item[0][1],
                     'url'=>'',
                     'child'=>[],
                 ];
-                if($item[1][0] === 'list') {
+                if ($item[1][0] === 'list') {
                     $tmp['child'] = $this->parseTree($item[1]['items']);
                 }
                 $tree[] = $tmp;

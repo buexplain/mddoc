@@ -1,4 +1,7 @@
 .*
 !.gitignore
+!.gitattributes
 vendor
-test/doc
+tests/doc
+.php_cs.cache
+composer.lock

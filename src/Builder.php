@@ -68,19 +68,19 @@ class Builder
 
     public function __construct($markdown_path, $html_path, $catalog_file, $doc_root='/')
     {
-        if(!is_dir($markdown_path)) {
+        if (!is_dir($markdown_path)) {
             throw new InvalidArgumentException('not found markdown path: '.$markdown_path);
         }
-        if(!is_dir($html_path)) {
+        if (!is_dir($html_path)) {
             throw new InvalidArgumentException('not found html path: '.$html_path);
         }
         $this->markdown_path = rtrim(str_replace('\\', '/', realpath($markdown_path)), '/');
         $this->html_path = rtrim(str_replace('\\', '/', realpath($html_path)), '/');
         $this->catalog_file = $catalog_file;
         $doc_root = trim($doc_root, '/ .');
-        if($doc_root == '') {
+        if ($doc_root == '') {
             $this->doc_root = '/';
-        }else{
+        } else {
             $this->doc_root = "/{$doc_root}/";
         }
         $this->fileSystem = new Filesystem();
@@ -126,38 +126,38 @@ class Builder
     {
         $markdownFile = ltrim($markdownFile, '. /');
         $markdownFilePath = $this->markdown_path.'/'.$markdownFile;
-        if(is_null($htmlSavePath)) {
+        if (is_null($htmlSavePath)) {
             $htmlSavePath = $this->html_path.'/'.substr($markdownFile, 0, -2).'html';
         }
-        if(!file_exists($markdownFilePath)) {
+        if (!file_exists($markdownFilePath)) {
             throw new ParserException("not found file: {$markdownFilePath}");
         }
-        if(is_null($markdownContent)) {
+        if (is_null($markdownContent)) {
             $markdownContent = file_get_contents($markdownFilePath);
         }
         //迁移markdown文件中的附件
         //支持markdown中嵌入$this->markdown_path目录下的其它markdown文件
         preg_match_all('/!?\[.+?\]\((.+?)(\s+"(.*?)")?\)/', $markdownContent, $matches);
-        if(isset($matches[1]) && !empty($matches[1])) {
+        if (isset($matches[1]) && !empty($matches[1])) {
             foreach ($matches[1] as $key=>$attach) {
-                if(strlen($attach) == 0 || $attach[0] == '/') {
+                if (strlen($attach) == 0 || $attach[0] == '/') {
                     continue;
                 }
-                $cleanAttach = substr($attach,0,2) == './' ? substr($attach, 2) : $attach;
+                $cleanAttach = substr($attach, 0, 2) == './' ? substr($attach, 2) : $attach;
                 //以当前markdown文件所在目录为根目录，寻找附件文件地址
                 $attachFile = realpath(dirname($markdownFilePath).'/'.$cleanAttach);
-                if(!file_exists($attachFile)) {
+                if (!file_exists($attachFile)) {
                     continue;
                 }
                 //判断当前文件是否为markdown文件，如果是，则转成转换后的html文件地址
                 if (strtolower(pathinfo($attach, PATHINFO_EXTENSION)) === 'md') {
                     //构造成html地址
-                    $attachFile = substr($this->doc_root.ltrim(str_replace('\\','/', substr($attachFile, strlen($this->markdown_path))), '/'), 0, -2).'html';
+                    $attachFile = substr($this->doc_root.ltrim(str_replace('\\', '/', substr($attachFile, strlen($this->markdown_path))), '/'), 0, -2).'html';
                     //替换markdown中的地址
-                    if(isset($matches[0][$key])) {
+                    if (isset($matches[0][$key])) {
                         $search = $matches[0][$key];
                         $replace = str_replace($attach, $attachFile, $matches[0][$key]);
-                    }else{
+                    } else {
                         $search = $attach;
                         $replace = $attachFile;
                     }
@@ -190,7 +190,7 @@ class Builder
     protected function renderCatalog()
     {
         $markdownFile = $this->markdown_path.'/'.$this->catalog_file;
-        if(!file_exists($markdownFile)) {
+        if (!file_exists($markdownFile)) {
             throw new ParserException("not found file: {$markdownFile}");
         }
         //读取章节内容
@@ -213,13 +213,13 @@ class Builder
      */
     protected function renderArticle($catalog=null)
     {
-        if(is_null($catalog)) {
+        if (is_null($catalog)) {
             $catalog = $this->catalogParser->tree;
         }
         foreach ($catalog as $value) {
-            if(!empty($value['child'])) {
+            if (!empty($value['child'])) {
                 $this->renderArticle($value['child']);
-            }elseif($value['url'] !== '') {
+            } elseif ($value['url'] !== '') {
                 //渲染markdown文件
                 $markdownContent = $this->render($value['title'], $value['url']);
                 //存储到全文索引中
@@ -228,7 +228,7 @@ class Builder
                     'title'=>$value['title'],
                     'content'=>$markdownContent,
                 ];
-            }else{
+            } else {
                 //存储到全文索引中
                 $this->search[] = [
                     'id'=>$value['id'],

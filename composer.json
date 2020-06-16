@@ -1,6 +1,6 @@
 {
   "name": "buexplain/mddoc",
-  "type": "project",
+  "type": "library",
   "keywords": [
     "php",
     "api",
@@ -9,17 +9,23 @@
     "html"
   ],
   "description": "这个是一个可以将markdown转换成html的包",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "require": {
     "php": ">=7.0.0",
     "symfony/console": "^4.3",
     "symfony/filesystem": "^4.3",
     "cebe/markdown": "^1.2"
   },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^2.14"
+  },
   "autoload": {
     "psr-4": {
       "MdDoc\\": "src/"
     }
+  },
+  "scripts": {
+    "cs-fix": "php-cs-fixer fix ./src"
   },
   "bin": [
     "bin/mddoc"
@@ -27,7 +33,7 @@
   "repositories": {
     "packagist": {
       "type": "composer",
-      "url": "https://packagist.phpcomposer.com"
+      "url": "https://mirrors.aliyun.com/composer"
     }
   }
 }

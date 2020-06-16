@@ -7,6 +7,7 @@
  */
 
 namespace MdDoc;
+
 use RuntimeException;
 use Throwable;
 
