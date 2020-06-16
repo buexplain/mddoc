@@ -6,7 +6,7 @@
 
 ```bash
 # 下载包
-composer require buexplain/mddoc "dev-master"
+composer require buexplain/mddoc
 # 创建存储html的文件夹
 mkdir doc
 # 根据markdown文档生成html文件，linux下将 mddoc.bat 替换为 mddoc 
